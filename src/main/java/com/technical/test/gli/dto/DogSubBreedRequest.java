@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class DogSubBreedRequest {
     private String dogName;
     private String dogSubName;
+    private String flag;
 
 }

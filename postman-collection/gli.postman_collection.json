@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "3b2e6f46-7303-470d-806b-8c2d29d9df57",
+		"name": "gli",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Dog Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dogName\" : \"terrier\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/createDogData",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"createDogData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Data By Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/getDogDataByName?dogName=terrier",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"getDogDataByName"
+					],
+					"query": [
+						{
+							"key": "dogName",
+							"value": "terrier"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Data List From DB",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/getDogDataListFromDb",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"getDogDataListFromDb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Data By Name",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/deleteDogDataByName?dogName=sheepdog",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"deleteDogDataByName"
+					],
+					"query": [
+						{
+							"key": "dogName",
+							"value": "sheepdog"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Dog Image",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/updateDogImage?oldDogName=terrier&newDogName=as",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"updateDogImage"
+					],
+					"query": [
+						{
+							"key": "oldDogName",
+							"value": "terrier"
+						},
+						{
+							"key": "newDogName",
+							"value": "as"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

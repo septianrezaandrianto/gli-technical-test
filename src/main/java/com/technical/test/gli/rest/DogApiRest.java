@@ -4,6 +4,7 @@ import com.technical.test.gli.dto.DogApiResponse;
 import com.technical.test.gli.dto.DogSubBreedRequest;
 import com.technical.test.gli.dto.DogSubBreedResponse;
 import com.technical.test.gli.exception.CustomResponseErrorHandler;
+import com.technical.test.gli.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,24 +82,34 @@ public class DogApiRest {
     public DogSubBreedResponse getBreed(DogSubBreedRequest dogSubBreedRequest) {
         String url = env.getProperty("dog.api.breed.url")
                 .replace("{dogName}", dogSubBreedRequest.getDogName());
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            makeRestApiCall(url);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        makeRestApiCall(url);
+            DogSubBreedResponse response = restTemplate.exchange(url, HttpMethod.GET, entity,
+                    DogSubBreedResponse.class).getBody();
 
-        DogSubBreedResponse response = restTemplate.exchange(url, HttpMethod.GET, entity,
-                DogSubBreedResponse.class).getBody();
+            List<String> newDataList = null;
+            if(dogSubBreedRequest.equals("shiba")) {
+                newDataList = response.getMessage().stream()
+                        .filter(a -> checkData(a))
+                        .collect(Collectors.toList());
+            } else {
+                newDataList = response.getMessage();
+            }
 
-        List<String> newDataList = response.getMessage().stream()
-                .filter(a -> checkData(a))
-                .collect(Collectors.toList());
 
-        DogSubBreedResponse result = DogSubBreedResponse.builder()
-                .status(response.getStatus())
-                .message(newDataList)
-                .build();
-        return result;
+            DogSubBreedResponse result = DogSubBreedResponse.builder()
+                    .status(response.getStatus())
+                    .message(newDataList)
+                    .build();
+            return result;
+        } catch(Exception e) {
+            logger.error("Error: ", e);
+            throw new NotFoundException("Data not found");
+        }
     }
 
     private boolean checkData(String data) {
@@ -107,9 +118,10 @@ public class DogApiRest {
         Matcher matcher = pattern.matcher(data);
         if (matcher.find()) {
             int number = Integer.parseInt(matcher.group());
-            if(number %2 != 0) {
+            if (number % 2 != 0) {
                 isValid = true;
             }
+
         }
         return isValid;
     }
